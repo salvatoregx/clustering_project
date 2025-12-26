@@ -1,0 +1,13 @@
+# Ignore Poetry virtualenvs wherever they appear
+.venv/
+*/.venv/
+
+# Ignore Pytest and coverage artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Ignore compiled python
+__pycache__/
+*/__pycache__/
+*.pyc

@@ -1,0 +1,27 @@
+[project]
+name = "model-training"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "salvatoregx",email = "dev.salvatoregx@proton.me"}
+]
+readme = "README.md"
+requires-python = ">=3.11, <3.14"
+dependencies = [
+    "prince (>=0.16.3,<0.17.0)",
+    "hdbscan (>=0.8.41,<0.9.0)",
+    "scikit-learn (>=1.8.0,<2.0.0)",
+    "pandas (>=2.3.3,<3.0.0)",
+    "mlflow (>=3.8.1,<4.0.0)",
+    "numpy (>=2.4.0,<3.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[dependency-groups]
+dev = [
+    "cython (>=3.2.3,<4.0.0)"
+]
