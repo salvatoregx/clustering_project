@@ -1,0 +1,21 @@
+[project]
+name = "data-gen"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "salvatoregx",email = "dev.salvatoregx@proton.me"}
+]
+readme = "README.md"
+requires-python = ">=3.11, <3.14"
+dependencies = [
+    "faker (>=39.0.0,<40.0.0)",
+    "numpy (>=2.4.0,<3.0.0)",
+    "pandas (>=2.3.3,<3.0.0)",
+    "pyarrow (>=22.0.0,<23.0.0)",
+    "tqdm (>=4.67.1,<5.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

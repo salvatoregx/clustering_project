@@ -1,0 +1,24 @@
+FROM python:3.11-slim
+
+# Install basics
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Install Poetry
+RUN pip install poetry
+
+# Copy configuration
+COPY pyproject.toml ./
+
+# Install dependencies (no dev deps, no interaction)
+RUN poetry config virtualenvs.create false \
+    && poetry install --only main --no-interaction --no-ansi --no-root
+
+# Copy the source code
+COPY src/ ./src/
+
+# Default command
+CMD ["python", "src/generate.py"]

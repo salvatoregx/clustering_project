@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:  # <--- You were missing this line
+  data_gen:
+    build: 
+      context: ./services/data_gen
+      dockerfile: Containerfile
+    volumes:
+      - ./data:/opt/data
+    profiles: ["setup"]
