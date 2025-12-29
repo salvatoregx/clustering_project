@@ -1,6 +1,10 @@
+import os
+import json
+from datetime import datetime
 import great_expectations as gx
 from pyspark.sql import DataFrame
 import logging
+from . import config
 
 def validate_sales_data(df_sales: DataFrame):
     """
@@ -32,6 +36,13 @@ def validate_sales_data(df_sales: DataFrame):
     
     # Run Validation
     results = validator.validate()
+    
+    # Save Results for Monitoring Dashboard
+    os.makedirs(config.VALIDATION_PATH, exist_ok=True)
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    output_file = os.path.join(config.VALIDATION_PATH, f"sales_validation_{timestamp}.json")
+    with open(output_file, "w") as f:
+        json.dump(results.to_json_dict(), f, indent=2)
     
     if not results["success"]:
         logging.warning(f"WARNING: Data Validation Failed! Success: {results['success']}")
