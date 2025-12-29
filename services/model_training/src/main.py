@@ -25,24 +25,24 @@ def main():
 
         # 2. Feature Selection & Preprocessing
         df_context, df_behavioral = preprocess.select_and_transform_features(df_original)
-        X_final_scaled, famd_model, behavioral_scaler, final_scaler = preprocess.run_preprocessing(
+        X_final, famd_model, behavioral_scaler = preprocess.run_preprocessing(
             df_context, df_behavioral
         )
 
         # 3. Clustering
         df_clustered, clusterer_model, noise_classifier_model = cluster.run_clustering(
-            X_final_scaled, df_original
+            X_final, df_original
         )
 
-        # 4. Logging
-        scalers = {'behavioral': behavioral_scaler, 'final': final_scaler}
+        # 4. Logging - No longer passing the final_scaler
+        scalers = {'behavioral': behavioral_scaler}
         log.log_experiment(
             run_id=run.info.run_id,
             famd_model=famd_model,
             scalers=scalers,
             clusterer=clusterer_model,
             noise_clf=noise_classifier_model,
-            X_scaled=X_final_scaled,
+            X_scaled=X_final,
             df_final=df_clustered
         )
 
