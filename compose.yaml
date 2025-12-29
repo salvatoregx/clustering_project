@@ -29,6 +29,15 @@ services:
     depends_on:
       - etl
 
+  streamlit_app:
+    build:
+      context: ./services/streamlit_app
+      dockerfile: Containerfile
+    volumes:
+      - ./data:/opt/data
+    ports:
+      - "8501:8501"
+
   mlflow:
     image: mlflow/mlflow:v2.14.1
     ports:

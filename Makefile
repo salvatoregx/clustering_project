@@ -7,6 +7,9 @@ run-etl:
 run-model:
 	podman-compose up --build model_training
 
+run-dashboard:
+	podman-compose up --build streamlit_app
+
 run-pipeline:
 	podman-compose up --build data_gen etl model_training
 

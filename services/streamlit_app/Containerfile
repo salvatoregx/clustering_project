@@ -1,0 +1,27 @@
+FROM python:3.11-slim
+
+# Install basics
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Install Poetry
+RUN pip install poetry
+
+# Copy configuration
+COPY pyproject.toml ./
+
+# Install dependencies
+RUN poetry config virtualenvs.create false \
+    && poetry install --only main --no-interaction --no-ansi --no-root
+
+# Copy source
+COPY src/ ./src/
+
+# Expose Streamlit port
+EXPOSE 8501
+
+# Default command
+CMD ["streamlit", "run", "src/app.py", "--server.address=0.0.0.0"]
