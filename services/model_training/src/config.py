@@ -9,6 +9,9 @@ os.makedirs(ARTIFACT_PATH, exist_ok=True)
 MLFLOW_TRACKING_URI = "http://mlflow:5000"
 MLFLOW_EXPERIMENT_NAME = "Retail Store Clustering"
 
+# --- Data Loading ---
+SAFE_PANDAS_LIMIT = 1_000_000 # Rows
+
 # --- Feature Engineering ---
 DATE_COL = 'opening_date'
 
