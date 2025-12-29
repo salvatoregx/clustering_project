@@ -1,11 +1,11 @@
 run-dashboard:
-	podman-compose up --build streamlit_app
+	podman-compose up --build -d streamlit_app
 
 run-tracking:
-	podman-compose up --build mlflow
+	podman-compose up --build -d mlflow
 
 run-platform:
-	podman-compose up --build --detach
+	podman-compose up --build -d
 
 stop:
 	podman-compose down

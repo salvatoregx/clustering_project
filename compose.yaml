@@ -2,23 +2,25 @@ version: '3.8'
 
 services:
   data_gen:
+    image: localhost/clustering_project_data_gen
     build: 
       context: ./services/data_gen
       dockerfile: Containerfile
     volumes:
       - ./data:/opt/data
-    # Run as a gRPC server for Dagster
-    command: ["dagster", "api-grpc", "-h", "0.0.0.0", "-p", "4000", "-m", "src.defs"]
+    command: ["dagster", "api", "grpc", "-h", "0.0.0.0", "-p", "4000", "-m", "src.defs"]
 
   etl:
+    image: localhost/clustering_project_etl
     build:
       context: ./services/etl
       dockerfile: Containerfile
     volumes:
       - ./data:/opt/data
-    command: ["dagster", "api-grpc", "-h", "0.0.0.0", "-p", "4000", "-m", "src.defs"]
+    command: ["dagster", "api", "grpc", "-h", "0.0.0.0", "-p", "4000", "-m", "src.defs"]
 
   model_training:
+    image: localhost/clustering_project_model_training
     build:
       context: ./services/model_training
       dockerfile: Containerfile
@@ -26,9 +28,10 @@ services:
       - ./data:/opt/data
     environment:
       - MLFLOW_TRACKING_URI=http://mlflow:5000
-    command: ["dagster", "api-grpc", "-h", "0.0.0.0", "-p", "4000", "-m", "src.defs"]
+    command: ["dagster", "api", "grpc", "-h", "0.0.0.0", "-p", "4000", "-m", "src.defs"]
 
   streamlit_app:
+    image: localhost/clustering_project_streamlit_app
     build:
       context: ./services/streamlit_app
       dockerfile: Containerfile
@@ -38,20 +41,60 @@ services:
       - "8501:8501"
 
   mlflow:
-    image: mlflow/mlflow:v2.14.1
+    image: ghcr.io/mlflow/mlflow:v3.8.1
     ports:
       - "5000:5000"
     volumes:
       - ./data/mlflow:/mlflow
     command: mlflow server --host 0.0.0.0 --backend-store-uri /mlflow
 
+  postgres:
+    image: docker.io/library/postgres:16
+    environment:
+      POSTGRES_USER: postgres_user
+      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_DB: dagster
+    volumes:
+      - dagster_postgresql_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres_user -d dagster"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   orchestrator:
+    image: localhost/clustering_project_orchestrator
     build:
       context: ./services/orchestrator
       dockerfile: Containerfile
     ports:
       - "3000:3000"
+    environment:
+      DAGSTER_HOME: /app
+    volumes:
+      - ./data:/opt/data
     depends_on:
-      - data_gen
-      - etl
-      - model_training
+      postgres:
+        condition: service_healthy
+      data_gen:
+        condition: service_started
+      etl:
+        condition: service_started
+      model_training:
+        condition: service_started
+
+  daemon:
+    image: localhost/clustering_project_orchestrator
+    command: ["dagster-daemon", "run"]
+    environment:
+      DAGSTER_HOME: /app
+    volumes:
+      - ./data:/opt/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+      orchestrator:
+        condition: service_started
+  
+volumes:
+  dagster_postgresql_data:
