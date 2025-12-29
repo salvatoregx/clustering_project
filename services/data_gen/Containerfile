@@ -21,4 +21,4 @@ RUN poetry config virtualenvs.create false \
 COPY src/ ./src/
 
 # Default command
-CMD ["python", "src/generate.py"]
+CMD ["python", "-m", "src.generate"]
