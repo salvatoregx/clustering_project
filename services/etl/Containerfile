@@ -2,12 +2,12 @@ FROM python:3.11-slim
 
 # Install Java (required for PySpark) and basics
 RUN apt-get update && apt-get install -y \
-    openjdk-17-jre-headless \
+    default-jre-headless \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-# Set JAVA_HOME
-ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+# Set JAVA_HOME to the stable default symlink
+ENV JAVA_HOME=/usr/lib/jvm/default-java
 
 WORKDIR /app
 
