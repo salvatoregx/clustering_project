@@ -15,3 +15,24 @@ services:
       dockerfile: Containerfile
     volumes:
       - ./data:/opt/data
+    depends_on:
+      - data_gen
+
+  model_training:
+    build:
+      context: ./services/model_training
+      dockerfile: Containerfile
+    volumes:
+      - ./data:/opt/data
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+    depends_on:
+      - etl
+
+  mlflow:
+    image: mlflow/mlflow:v2.14.1
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./data/mlflow:/mlflow
+    command: mlflow server --host 0.0.0.0 --backend-store-uri /mlflow
