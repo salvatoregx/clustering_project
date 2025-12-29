@@ -3,12 +3,13 @@ import joblib
 import os
 from hdbscan.validity import validity_index
 from sklearn.metrics import silhouette_score
+import logging
 
 from . import config
 
 def log_experiment(run_id, famd_model, scalers, clusterer, noise_clf, X_scaled, df_final):
     """Logs all parameters, metrics, and artifacts to MLflow."""
-    print("--- Logging Experiment to MLflow ---")
+    logging.info("--- Logging Experiment to MLflow ---")
     
     # --- Log Parameters ---
     mlflow.log_param("famd_components", config.FAMD_COMPONENTS)
@@ -26,7 +27,7 @@ def log_experiment(run_id, famd_model, scalers, clusterer, noise_clf, X_scaled, 
     # Final metrics (after noise handling)
     final_silhouette = silhouette_score(X_scaled, df_final['cluster_final'])
     mlflow.log_metric("final_silhouette_score", final_silhouette)
-
+    logging.info(f"Final Silhouette Score (after noise handling): {final_silhouette:.4f}")
     # --- Log Artifacts ---
     # Save models
     joblib.dump(famd_model, os.path.join(config.ARTIFACT_PATH, "famd_model.joblib"))
@@ -41,4 +42,4 @@ def log_experiment(run_id, famd_model, scalers, clusterer, noise_clf, X_scaled, 
     
     # Log the entire artifacts directory
     mlflow.log_artifacts(config.ARTIFACT_PATH, artifact_path="results")
-    print(f"Clustering complete. Artifacts saved to '{config.ARTIFACT_PATH}' and logged to MLflow run {run_id}.")
+    logging.info(f"Clustering complete. Artifacts saved to '{config.ARTIFACT_PATH}' and logged to MLflow run {run_id}.")

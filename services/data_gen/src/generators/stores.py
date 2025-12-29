@@ -2,10 +2,11 @@ import pandas as pd
 import numpy as np
 from faker import Faker
 from .. import config
+import logging
 
 def generate(num_stores: int, fake: Faker):
     """Generates Physical and Management Store Dimensions with Geo-Coherence"""
-    print("Generating Stores with Geographic Coherence...")
+    logging.info("Generating Stores with Geographic Coherence...")
     store_ids = [fake.uuid4() for _ in range(num_stores)]
     
     placements = ['Shopping Mall', 'Street', 'Commercial Bldg', 'In-Company']

@@ -1,12 +1,13 @@
 import great_expectations as gx
 from pyspark.sql import DataFrame
+import logging
 
 def validate_sales_data(df_sales: DataFrame):
     """
     Validates raw sales data using Great Expectations (Fluent API).
     Ensures data integrity before heavy aggregation.
     """
-    print("--- Starting Data Validation ---")
+    logging.info("--- Starting Data Validation ---")
     # Using project_root_dir is good practice in containerized/production environments
     context = gx.get_context(project_root_dir='/app')
     
@@ -33,7 +34,7 @@ def validate_sales_data(df_sales: DataFrame):
     results = validator.validate()
     
     if not results["success"]:
-        print(f"WARNING: Data Validation Failed! Success: {results['success']}")
+        logging.warning(f"WARNING: Data Validation Failed! Success: {results['success']}")
         # In a strict pipeline, one might raise an exception here.
     else:
-        print("Data Validation Passed.")
+        logging.info("Data Validation Passed.")

@@ -1,3 +1,4 @@
+import logging
 import pandas as pd
 import numpy as np
 import prince
@@ -20,7 +21,7 @@ def run_preprocessing(df_context: pd.DataFrame, df_behavioral: pd.DataFrame):
     Performs dimensionality reduction on contextual features and scales
     behavioral features.
     """
-    print("--- Running Preprocessing (FAMD & Scaling) ---")
+    logging.info("--- Running Preprocessing (FAMD & Scaling) ---")
     
     # 1. FAMD for contextual features
     famd = prince.FAMD(n_components=config.FAMD_COMPONENTS, random_state=42)

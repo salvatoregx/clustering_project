@@ -1,12 +1,15 @@
 import os
 import shutil
 import numpy as np
+import logging
 from faker import Faker
 from . import config
 from .generators import products, stores, history
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
 def main():
-    print(f"Starting Data Generation for {config.LOCALE}...")
+    logging.info(f"Starting Data Generation for {config.LOCALE}...")
     
     # Setup
     fake = Faker(config.LOCALE)
@@ -14,7 +17,7 @@ def main():
     
     # Cleanup existing data to ensure idempotency
     if os.path.exists(config.OUTPUT_DIR):
-        print(f"Cleaning up existing data at {config.OUTPUT_DIR}...")
+        logging.info(f"Cleaning up existing data at {config.OUTPUT_DIR}...")
         shutil.rmtree(config.OUTPUT_DIR)
 
     os.makedirs(f"{config.OUTPUT_DIR}/fact_sales", exist_ok=True)
@@ -32,7 +35,7 @@ def main():
     # 3. History
     history.generate(s_ids, p_ids, p_prices, p_costs, df_mgmt)
     
-    print("Generation Complete.")
+    logging.info("Generation Complete.")
 
 if __name__ == "__main__":
     main()

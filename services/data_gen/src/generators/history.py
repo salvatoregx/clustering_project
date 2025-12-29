@@ -4,6 +4,7 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 from datetime import datetime, timedelta
 from tqdm import tqdm
+import logging
 from .. import config
 
 def _flush_sales(data):
@@ -28,7 +29,7 @@ def generate(store_ids, product_ids, product_prices, product_costs, store_df):
     Synchronized Generator:
     Iterates week-by-week to ensure Sales and Inventory match.
     """
-    print("Generating Synchronized History (Sales + Inventory)...")
+    logging.info("Generating Synchronized History (Sales + Inventory)...")
     
     # Pre-compute multipliers
     store_multipliers = {}

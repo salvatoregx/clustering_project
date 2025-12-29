@@ -1,5 +1,6 @@
 import os
 from pyspark.sql import SparkSession, DataFrame
+import logging
 from pyspark.sql import functions as F
 from pyspark.ml.feature import VectorAssembler
 from pyspark.ml.regression import LinearRegression
@@ -9,7 +10,7 @@ from . import validation
 
 def _load_data(spark: SparkSession) -> dict[str, DataFrame]:
     """Loads all raw data sources from Parquet files."""
-    print("--- Loading Raw Data ---")
+    logging.info("--- Loading Raw Data ---")
     return {
         "dim_product": spark.read.parquet(os.path.join(config.RAW_DATA_PATH, "dim_product.parquet")),
         "dim_store_phys": spark.read.parquet(os.path.join(config.RAW_DATA_PATH, "dim_store_physical.parquet")),
@@ -20,7 +21,7 @@ def _load_data(spark: SparkSession) -> dict[str, DataFrame]:
 
 def _aggregate_features(data: dict[str, DataFrame]) -> DataFrame:
     """Performs aggregations to create store-level features."""
-    print("--- Aggregating Features ---")
+    logging.info("--- Aggregating Features ---")
     
     # Unpack dataframes
     fact_sales = data["fact_sales"]
@@ -63,7 +64,7 @@ def _aggregate_features(data: dict[str, DataFrame]) -> DataFrame:
 
 def _engineer_features(df: DataFrame) -> DataFrame:
     """Cleans data and engineers new features."""
-    print("--- Engineering and Cleaning Features ---")
+    logging.info("--- Engineering and Cleaning Features ---")
     
     # A. Sophisticated Imputation: Linear Regression
     # Predict size_m2 based on storage_capacity_m2 (highly correlated)

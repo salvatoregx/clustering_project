@@ -1,10 +1,11 @@
 import pandas as pd
 import numpy as np
 from faker import Faker
+import logging
 
 def generate(num_products: int, fake: Faker):
     """Generates Product Dimension and returns metadata needed for history generation."""
-    print("Generating Products...")
+    logging.info("Generating Products...")
     product_ids = [fake.uuid4() for _ in range(num_products)]
     categories = ['Camisetas', 'Calças', 'Vestidos', 'Acessórios', 'Casacos']
     

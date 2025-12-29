@@ -5,16 +5,19 @@ This is the main entry point for the model training service. It orchestrates
 the pipeline by loading data, preprocessing, clustering, and logging the
 results with MLflow.
 """
+import logging
 import mlflow
 
 from . import config, data, preprocess, cluster, log
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def main():
     """Main execution function for the model training pipeline."""
     mlflow.set_tracking_uri(config.MLFLOW_TRACKING_URI)
     mlflow.set_experiment(config.MLFLOW_EXPERIMENT_NAME)
     with mlflow.start_run() as run:
-        print(f"MLflow Run ID: {run.info.run_id}")
+        logging.info(f"MLflow Run ID: {run.info.run_id}")
         mlflow.set_tag("service", "model_training")
 
         # 1. Load Data
