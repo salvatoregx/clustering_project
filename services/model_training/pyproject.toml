@@ -27,3 +27,6 @@ build-backend = "poetry.core.masonry.api"
 dev = [
     "cython (>=3.2.3,<4.0.0)"
 ]
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.0"
