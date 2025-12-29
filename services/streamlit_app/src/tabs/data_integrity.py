@@ -2,7 +2,7 @@ import streamlit as st
 import json
 import os
 import glob
-from .. import config
+from . import config
 
 def show():
     """Displays the Data Integrity tab with Great Expectations validation results."""

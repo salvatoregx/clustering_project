@@ -1,7 +1,7 @@
 import streamlit as st
 
-from . import data_loader
-from .tabs import data_integrity, visualization, business_actions
+import data_loader
+from tabs import data_integrity, visualization, business_actions
 
 def main():
     """Main function to run the Streamlit application."""

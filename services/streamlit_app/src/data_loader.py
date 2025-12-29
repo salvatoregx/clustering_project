@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import os
-from . import config
+from tabs import config
 
 def load_clustered_data():
     """Loads the clustered data, checking for file updates to invalidate cache."""
