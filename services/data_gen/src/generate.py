@@ -1,4 +1,5 @@
 import os
+import shutil
 import numpy as np
 from faker import Faker
 from . import config
@@ -11,6 +12,11 @@ def main():
     fake = Faker(config.LOCALE)
     np.random.seed(42)
     
+    # Cleanup existing data to ensure idempotency
+    if os.path.exists(config.OUTPUT_DIR):
+        print(f"Cleaning up existing data at {config.OUTPUT_DIR}...")
+        shutil.rmtree(config.OUTPUT_DIR)
+
     os.makedirs(f"{config.OUTPUT_DIR}/fact_sales", exist_ok=True)
     os.makedirs(f"{config.OUTPUT_DIR}/fact_inventory", exist_ok=True)
     
