@@ -1,6 +1,6 @@
 version: '3.8'
 
-services:  # <--- You were missing this line
+services:
   data_gen:
     build: 
       context: ./services/data_gen
@@ -8,3 +8,10 @@ services:  # <--- You were missing this line
     volumes:
       - ./data:/opt/data
     profiles: ["setup"]
+
+  etl:
+    build:
+      context: ./services/etl
+      dockerfile: Containerfile
+    volumes:
+      - ./data:/opt/data
