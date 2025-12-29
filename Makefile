@@ -1,11 +1,11 @@
 run-datagen:
-	podman-compose up --build run data_gen
+	podman-compose up --build data_gen
 
 run-etl:
 	podman-compose up --build etl
 
 run-model:
-	podman-compose up --build model
+	podman-compose up --build model_training
 
 run-pipeline:
 	podman-compose up --build data_gen etl model_training
