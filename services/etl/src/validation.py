@@ -13,18 +13,23 @@ def validate_sales_data(df_sales: DataFrame):
     """
     logging.info("--- Starting Data Validation ---")
     # Using project_root_dir is good practice in containerized/production environments
-    context = gx.get_context(project_root_dir='/app')
+    context = gx.get_context(mode="ephemeral")
     
-    # Define Data Source & Asset
-    datasource = context.sources.add_spark("sales_source")
-    asset = datasource.add_dataframe_asset("sales_asset", dataframe=df_sales)
+    # Define Data Source, Asset and Batch Definition
+    datasource = context.data_sources.add_or_update_spark("sales_source")
+    asset = datasource.add_dataframe_asset("sales_asset")
+    batch_definition = asset.add_batch_definition_whole_dataframe("sales_batch_def")
     
     # Create Expectation Suite
-    suite = context.add_or_update_expectation_suite("sales_validation_suite")
+    suite_name = "sales_validation_suite"
+    suite = context.suites.add(gx.ExpectationSuite(name=suite_name))
+
+    # Build Batch Request passing the DataFrame
+    batch_request = batch_definition.build_batch_request(batch_parameters={"dataframe": df_sales})
     
     # Get Validator
     validator = context.get_validator(
-        batch_request=asset.build_batch_request(),
+        batch_request=batch_request,
         expectation_suite=suite
     )
     
