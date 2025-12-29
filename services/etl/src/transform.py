@@ -1,7 +1,8 @@
 import os
 from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql import functions as F
-from pyspark.ml.feature import Imputer
+from pyspark.ml.feature import VectorAssembler
+from pyspark.ml.regression import LinearRegression
 
 from . import config
 from . import validation
@@ -66,12 +67,26 @@ def _engineer_features(df: DataFrame) -> DataFrame:
     """Cleans data and engineers new features."""
     print("--- Engineering and Cleaning Features ---")
     
-    # A. Impute missing size_m2 values
-    imputer = Imputer(
-        inputCols=["size_m2"],
-        outputCols=["size_m2_imputed"]
-    ).setStrategy("mean").setMissingValue(0.0)
-    df_imputed = imputer.fit(df).transform(df)
+    # A. Sophisticated Imputation: Linear Regression
+    # Predict size_m2 based on storage_capacity_m2 (highly correlated)
+    
+    # 1. Prepare Features
+    assembler = VectorAssembler(inputCols=["storage_capacity_m2"], outputCol="features")
+    df_vec = assembler.transform(df)
+    
+    # 2. Train Model on known data (size_m2 > 0)
+    train_data = df_vec.filter(F.col("size_m2") > 0)
+    
+    lr = LinearRegression(featuresCol="features", labelCol="size_m2")
+    model = lr.fit(train_data)
+    
+    # 3. Predict and Impute
+    predictions = model.transform(df_vec)
+    df_imputed = predictions.withColumn(
+        "size_m2_imputed",
+        F.when(F.col("size_m2") > 0, F.col("size_m2"))
+         .otherwise(F.abs(F.col("prediction")))
+    ).drop("features", "prediction")
 
     # B. Create new features using the imputed value
     df_engineered = df_imputed.withColumn(
