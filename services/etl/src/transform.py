@@ -14,10 +14,8 @@ def _load_data(spark: SparkSession) -> dict[str, DataFrame]:
         "dim_product": spark.read.parquet(os.path.join(config.RAW_DATA_PATH, "dim_product.parquet")),
         "dim_store_phys": spark.read.parquet(os.path.join(config.RAW_DATA_PATH, "dim_store_physical.parquet")),
         "dim_store_mgmt": spark.read.parquet(os.path.join(config.RAW_DATA_PATH, "dim_store_management.parquet")),
-        "fact_sales": spark.read.parquet(os.path.join(config.RAW_DATA_PATH, "fact_sales")) \
-            .filter(F.col("year").isin([2022, 2023, 2024])),
-        "fact_inventory": spark.read.parquet(os.path.join(config.RAW_DATA_PATH, "fact_inventory")) \
-            .filter(F.col("year").isin([2022, 2023, 2024])),
+        "fact_sales": spark.read.parquet(os.path.join(config.RAW_DATA_PATH, "fact_sales")),
+        "fact_inventory": spark.read.parquet(os.path.join(config.RAW_DATA_PATH, "fact_inventory")),
     }
 
 def _aggregate_features(data: dict[str, DataFrame]) -> DataFrame:
