@@ -3,9 +3,16 @@ import pandas as pd
 import os
 from . import config
 
-@st.cache_data
 def load_clustered_data():
-    """Loads the clustered data from the model training artifacts."""
-    if os.path.exists(config.CLUSTERED_DATA_PATH):
-        return pd.read_parquet(config.CLUSTERED_DATA_PATH)
-    return None
+    """Loads the clustered data, checking for file updates to invalidate cache."""
+    if not os.path.exists(config.CLUSTERED_DATA_PATH):
+        return None
+    
+    # Pass modification time to force cache invalidation when file changes
+    mtime = os.path.getmtime(config.CLUSTERED_DATA_PATH)
+    return _load_data_cached(mtime)
+
+@st.cache_data
+def _load_data_cached(mtime):
+    """Actual data loading, cached based on mtime."""
+    return pd.read_parquet(config.CLUSTERED_DATA_PATH)

@@ -1,0 +1,16 @@
+[project]
+name = "orchestrator"
+version = "0.1.0"
+description = "Dagster Orchestrator"
+authors = [{name = "salvatoregx",email = "dev.salvatoregx@proton.me"}]
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+    "dagster (>=1.6.0,<2.0.0)",
+    "dagster-webserver (>=1.6.0,<2.0.0)",
+    "dagster-postgres (>=0.21.0,<1.0.0)"
+]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

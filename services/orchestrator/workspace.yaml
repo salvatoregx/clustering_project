@@ -1,0 +1,13 @@
+load_from:
+  - grpc_server:
+      host: data_gen
+      port: 4000
+      location_name: data_gen
+  - grpc_server:
+      host: etl
+      port: 4000
+      location_name: etl
+  - grpc_server:
+      host: model_training
+      port: 4000
+      location_name: model_training

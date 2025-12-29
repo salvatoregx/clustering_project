@@ -7,7 +7,8 @@ services:
       dockerfile: Containerfile
     volumes:
       - ./data:/opt/data
-    profiles: ["setup"]
+    # Run as a gRPC server for Dagster
+    command: ["dagster", "api-grpc", "-h", "0.0.0.0", "-p", "4000", "-m", "src.defs"]
 
   etl:
     build:
@@ -15,8 +16,7 @@ services:
       dockerfile: Containerfile
     volumes:
       - ./data:/opt/data
-    depends_on:
-      - data_gen
+    command: ["dagster", "api-grpc", "-h", "0.0.0.0", "-p", "4000", "-m", "src.defs"]
 
   model_training:
     build:
@@ -26,8 +26,7 @@ services:
       - ./data:/opt/data
     environment:
       - MLFLOW_TRACKING_URI=http://mlflow:5000
-    depends_on:
-      - etl
+    command: ["dagster", "api-grpc", "-h", "0.0.0.0", "-p", "4000", "-m", "src.defs"]
 
   streamlit_app:
     build:
@@ -45,3 +44,14 @@ services:
     volumes:
       - ./data/mlflow:/mlflow
     command: mlflow server --host 0.0.0.0 --backend-store-uri /mlflow
+
+  orchestrator:
+    build:
+      context: ./services/orchestrator
+      dockerfile: Containerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - data_gen
+      - etl
+      - model_training
