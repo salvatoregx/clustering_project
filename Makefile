@@ -4,7 +4,7 @@ run-datagen:
 run-etl:
 	podman-compose up --build etl
 
-run-model:
+run-model-training:
 	podman-compose up --build model_training
 
 run-dashboard:

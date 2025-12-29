@@ -43,7 +43,7 @@ def generate(store_ids, product_ids, product_prices, product_costs, store_df):
         store_multipliers[sid] = max(0.1, val)
 
     # Time Iterator
-    weeks = pd.date_range(start=config.START_DATE, end=datetime.now(), freq='W-MON')
+    weeks = pd.date_range(start=config.START_DATE, end=config.END_DATE, freq='W-MON')
     
     sales_buffer = []
     inventory_buffer = []
