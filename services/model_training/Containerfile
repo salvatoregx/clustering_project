@@ -11,7 +11,7 @@ WORKDIR /app
 RUN pip install poetry
 
 # Copy configuration
-COPY pyproject.toml ./
+COPY pyproject.toml poetry.lock ./
 
 # Define build argument for dev dependencies
 ARG INSTALL_DEV=false

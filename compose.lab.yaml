@@ -1,11 +1,15 @@
 # compose.lab.yaml
 services:
   model_training:
+    image: localhost/clustering_project_model_training:dev
     build:
+      context: ./services/model_training
+      dockerfile: Containerfile
       args:
         INSTALL_DEV: "true"
     volumes:
       - ./services/model_training/src:/app/src
     ports:
       - "8888:8888"
+      - "4000:4000"
     command: ["bash", "-c", "dagster api grpc -h 0.0.0.0 -p 4000 -m src.defs & jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root"]
