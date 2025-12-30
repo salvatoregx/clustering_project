@@ -26,6 +26,7 @@ services:
       dockerfile: Containerfile
     volumes:
       - ./data:/opt/data
+      - ./services/model_training/src:/app/src
     environment:
       - MLFLOW_TRACKING_URI=http://mlflow:5000
     command: ["dagster", "api", "grpc", "-h", "0.0.0.0", "-p", "4000", "-m", "src.defs"]

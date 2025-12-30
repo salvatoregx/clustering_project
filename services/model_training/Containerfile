@@ -13,9 +13,12 @@ RUN pip install poetry
 # Copy configuration
 COPY pyproject.toml ./
 
+# Define build argument for dev dependencies
+ARG INSTALL_DEV=false
+
 # Install dependencies
 RUN poetry config virtualenvs.create false \
-    && poetry install --only main --no-interaction --no-ansi --no-root
+    && if [ "$INSTALL_DEV" = "true" ] ; then poetry install --no-interaction --no-ansi --no-root ; else poetry install --only main --no-interaction --no-ansi --no-root ; fi
 
 # Copy source
 COPY src/ ./src/
