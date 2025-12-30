@@ -7,6 +7,7 @@ results with MLflow.
 """
 import logging
 import mlflow
+from mlflow.tracking import MlflowClient
 
 from . import config, data, preprocess, cluster, log
 
@@ -15,7 +16,16 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 def main():
     """Main execution function for the model training pipeline."""
     mlflow.set_tracking_uri(config.MLFLOW_TRACKING_URI)
+    
+    client = MlflowClient()
+    experiment = client.get_experiment_by_name(config.MLFLOW_EXPERIMENT_NAME)
+    
+    if experiment and experiment.lifecycle_stage == "deleted":
+        logging.warning(f"Experiment '{config.MLFLOW_EXPERIMENT_NAME}' was deleted. Restoring it...")
+        client.restore_experiment(experiment.experiment_id)
+
     mlflow.set_experiment(config.MLFLOW_EXPERIMENT_NAME)
+    
     with mlflow.start_run() as run:
         logging.info(f"MLflow Run ID: {run.info.run_id}")
         mlflow.set_tag("service", "model_training")
@@ -34,7 +44,7 @@ def main():
             X_final, df_original
         )
 
-        # 4. Logging - No longer passing the final_scaler
+        # 4. Logging
         scalers = {'behavioral': behavioral_scaler}
         log.log_experiment(
             run_id=run.info.run_id,

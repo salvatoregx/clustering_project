@@ -18,7 +18,7 @@ def log_experiment(run_id, famd_model, scalers, clusterer, noise_clf, X_scaled, 
     # --- Log Metrics ---
     # Initial metrics (before noise handling)
     initial_noise_ratio = (df_final['cluster'] == -1).sum() / len(df_final)
-    dbcv_score = validity_index(X_scaled, df_final['cluster'].values, metric='manhattan')
+    dbcv_score = validity_index(X_scaled, df_final['cluster'].values, metric='cityblock')
     mlflow.log_metrics({
         "initial_noise_ratio": initial_noise_ratio,
         "dbcv_score": dbcv_score

@@ -46,7 +46,7 @@ services:
       - "5000:5000"
     volumes:
       - ./data/mlflow:/mlflow
-    command: mlflow server --host 0.0.0.0 --backend-store-uri /mlflow
+    command: mlflow server --host 0.0.0.0 --backend-store-uri /mlflow --allowed-hosts "*"
 
   postgres:
     image: docker.io/library/postgres:16

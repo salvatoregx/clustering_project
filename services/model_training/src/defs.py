@@ -1,4 +1,4 @@
-from dagster import asset, Definitions, AssetKey, SourceAsset, MetadataValue
+from dagster import asset, Definitions, AssetKey, SourceAsset, MetadataValue, AutoMaterializePolicy
 from . import main as model_main
 
 # Reference the asset from the etl service
@@ -9,7 +9,8 @@ store_features_asset = SourceAsset(key=AssetKey("store_features_parquet"))
     deps=[store_features_asset],
     metadata={
         "dashboard_url": MetadataValue.url("http://localhost:8501"),
-    }
+    },
+    auto_materialize_policy=AutoMaterializePolicy.eager(),
 )
 def clustering_model():
     """Trains the clustering model and logs to MLflow."""
