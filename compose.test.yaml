@@ -1,0 +1,36 @@
+version: '3.8'
+
+# This compose file is for running containerized integration tests.
+# It expects a DATA_PATH environment variable to be set to the temporary test data directory.
+
+services:
+  data_gen:
+    image: localhost/clustering_project_data_gen:test
+    build: 
+      context: ./services/data_gen
+      dockerfile: Containerfile
+    volumes:
+      - ${DATA_PATH:?DATA_PATH is not set!}:/opt/data
+    # The default CMD from the Containerfile will be used: ["python", "-m", "src.generate"]
+
+  etl:
+    image: localhost/clustering_project_etl:test
+    build: 
+      context: ./services/etl
+      dockerfile: Containerfile
+    volumes:
+      - ${DATA_PATH:?DATA_PATH is not set!}:/opt/data
+
+  model_training:
+    image: localhost/clustering_project_model_training:test
+    build: ./services/model_training
+    volumes:
+      - ${DATA_PATH:?DATA_PATH is not set!}:/opt/data
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v3.8.1
+    volumes:
+      - ${DATA_PATH:?DATA_PATH is not set!}/mlflow:/mlflow
+    command: mlflow server --host 0.0.0.0 --port 5000 --backend-store-uri /mlflow --allowed-hosts "*"
