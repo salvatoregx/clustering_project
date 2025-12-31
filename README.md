@@ -1,4 +1,5 @@
 # From Raw Data to Retail Strategy: A Deep Dive into Store Segmentation
+[![CI](https://github.com/salvatoregx/clustering_project/actions/workflows/ci.yml/badge.svg)](https://github.com/salvatoregx/clustering_project/actions/workflows/ci.yml)
 
 This flagship portfolio project showcases a complete, production-grade data science solution for strategic retail segmentation. It moves beyond simplistic revenue-based groupings to uncover nuanced store archetypes by analyzing a rich blend of performance, behavioral, and contextual data. The outcome is a powerful, interactive platform that translates advanced unsupervised learning models (FAMD + HDBSCAN) into actionable business intelligence, enabling targeted strategies for marketing, inventory, and operations.
 
