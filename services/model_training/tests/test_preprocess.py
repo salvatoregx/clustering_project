@@ -49,8 +49,8 @@ class TestPreprocess(unittest.TestCase):
         self.assertIsInstance(famd_model, prince.FAMD)
         self.assertIsInstance(scaler, StandardScaler)
 
-    @patch("prince.FAMD")
-    @patch("sklearn.preprocessing.StandardScaler")
+    @patch("src.preprocess.prince.FAMD")
+    @patch("src.preprocess.StandardScaler")
     def test_run_preprocessing_mocked_logic(self, MockScaler, MockFAMD):
         """Tests the internal logic of preprocessing by mocking external libraries."""
         mock_famd_instance = MagicMock()

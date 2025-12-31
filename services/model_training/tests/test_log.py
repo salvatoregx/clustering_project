@@ -32,7 +32,7 @@ class TestLog(unittest.TestCase):
         mock_scalers = {"behavioral": MagicMock()}
         mock_clusterer = MagicMock()
         mock_noise_clf = MagicMock()
-        X_scaled = np.random.rand(10, 5)
+        X_scaled = np.random.rand(5, 5) 
         df_final = pd.DataFrame(
             {"cluster": [0, 0, 1, 1, -1], "cluster_final": [0, 0, 1, 1, 0]}
         )
