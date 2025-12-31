@@ -36,7 +36,7 @@ jobs:
     - name: Run Pytest
       run: |
         cd services/${{ matrix.service }}
-        poetry run pytest
+        PYTHONPATH=. poetry run pytest
 
   # 2. Integration Tests: Runs your containerized pipeline test
   integration-tests:
