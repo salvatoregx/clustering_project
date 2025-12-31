@@ -18,3 +18,7 @@ data/*
 
 # Ignore notebook checkpoints
 .ipynb_checkpoints/
+
+# Ignore ruff
+.ruff_cache/
+.ruff_lintr/

@@ -11,9 +11,10 @@ from pathlib import Path
 COMPOSE_CMD = os.environ.get("COMPOSE", "podman-compose")
 TEST_COMPOSE_FILE = Path(__file__).parent.parent / "compose.test.yaml"
 
+
 @unittest.skipIf(
     not shutil.which(COMPOSE_CMD.split(" ")[0]),
-    f"'{COMPOSE_CMD}' not found. Skipping containerized integration tests."
+    f"'{COMPOSE_CMD}' not found. Skipping containerized integration tests.",
 )
 class TestContainerizedPipelineIntegration(unittest.TestCase):
     """
@@ -30,12 +31,13 @@ class TestContainerizedPipelineIntegration(unittest.TestCase):
         print("\nBuilding service images for integration test...")
         subprocess.run(
             [COMPOSE_CMD, "-f", str(TEST_COMPOSE_FILE), "build"],
-            check=True, capture_output=True,
+            check=True,
+            capture_output=True,
         )
 
         cls.temp_dir = tempfile.TemporaryDirectory()
         cls.data_path = Path(cls.temp_dir.name)
-        
+
         cls.env = os.environ.copy()
         cls.env["DATA_PATH"] = str(cls.data_path)
 
@@ -44,11 +46,12 @@ class TestContainerizedPipelineIntegration(unittest.TestCase):
         """Cleans up the temporary directory and stops all test containers."""
         if cls.temp_dir:
             cls.temp_dir.cleanup()
-        
+
         print("\nCleaning up test containers...")
         subprocess.run(
             [COMPOSE_CMD, "-f", str(TEST_COMPOSE_FILE), "down", "--volumes"],
-            check=True, capture_output=True,
+            check=True,
+            capture_output=True,
         )
 
     def test_01_data_gen_service(self):
@@ -56,7 +59,10 @@ class TestContainerizedPipelineIntegration(unittest.TestCase):
         print("\n--- Running data_gen container ---")
         result = subprocess.run(
             [COMPOSE_CMD, "-f", str(TEST_COMPOSE_FILE), "run", "--rm", "data_gen"],
-            check=True, capture_output=True, text=True, env=self.env,
+            check=True,
+            capture_output=True,
+            text=True,
+            env=self.env,
         )
         self.assertIn("Generation Complete.", result.stdout)
         self.assertTrue((self.data_path / "raw" / "dim_product.parquet").exists())
@@ -70,19 +76,41 @@ class TestContainerizedPipelineIntegration(unittest.TestCase):
         print("\n--- Running etl container ---")
         result = subprocess.run(
             [COMPOSE_CMD, "-f", str(TEST_COMPOSE_FILE), "run", "--rm", "etl"],
-            check=True, capture_output=True, text=True, env=self.env,
+            check=True,
+            capture_output=True,
+            text=True,
+            env=self.env,
         )
         self.assertIn("Writing", result.stdout)
-        self.assertTrue((self.data_path / "processed" / "store_features.parquet").exists())
+        self.assertTrue(
+            (self.data_path / "processed" / "store_features.parquet").exists()
+        )
         self.assertGreater(len(list((self.data_path / "validation").glob("*.json"))), 0)
 
     def test_03_model_training_service(self):
         """Tests the model_training service, consuming etl's output."""
         if not (self.data_path / "processed" / "store_features.parquet").exists():
             self.skipTest("Skipping model_training test: etl output is missing.")
-        
-        subprocess.run([COMPOSE_CMD, "-f", str(TEST_COMPOSE_FILE), "up", "-d", "mlflow"], check=True, env=self.env)
-        result = subprocess.run([COMPOSE_CMD, "-f", str(TEST_COMPOSE_FILE), "run", "--rm", "model_training"], check=True, capture_output=True, text=True, env=self.env)
+
+        subprocess.run(
+            [COMPOSE_CMD, "-f", str(TEST_COMPOSE_FILE), "up", "-d", "mlflow"],
+            check=True,
+            env=self.env,
+        )
+        result = subprocess.run(
+            [
+                COMPOSE_CMD,
+                "-f",
+                str(TEST_COMPOSE_FILE),
+                "run",
+                "--rm",
+                "model_training",
+            ],
+            check=True,
+            capture_output=True,
+            text=True,
+            env=self.env,
+        )
         self.assertIn("Clustering complete.", result.stdout)
         self.assertTrue((self.data_path / "artifacts" / "famd_model.joblib").exists())
         self.assertGreater(len(list((self.data_path / "mlflow").iterdir())), 0)

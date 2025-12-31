@@ -1,8 +1,16 @@
-from dagster import asset, Definitions, AssetKey, SourceAsset, MetadataValue, AutoMaterializePolicy
+from dagster import (
+    asset,
+    Definitions,
+    AssetKey,
+    SourceAsset,
+    MetadataValue,
+    AutoMaterializePolicy,
+)
 from . import main as model_main
 
 # Reference the asset from the etl service
 store_features_asset = SourceAsset(key=AssetKey("store_features_parquet"))
+
 
 @asset(
     group_name="model_layer",
@@ -16,5 +24,6 @@ def clustering_model():
     """Trains the clustering model and logs to MLflow."""
     model_main.main()
     return "Model artifacts saved"
+
 
 defs = Definitions(assets=[clustering_model])
