@@ -32,6 +32,12 @@ jobs:
       run: |
         cd services/${{ matrix.service }}
         poetry install --no-interaction --no-root
+
+    - name: Run Linter & Formatter Check
+      run: |
+        cd services/${{ matrix.service }}
+        poetry run ruff check .
+        poetry run ruff format --check .
         
     - name: Run Pytest
       run: |

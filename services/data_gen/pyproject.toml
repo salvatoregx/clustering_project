@@ -24,3 +24,15 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.0"
+ruff = "^0.14.10"
+
+[tool.ruff]
+line-length = 88
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I"]  # E=Error, F=Pyflakes, I=Isort (Import sorting)
+ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
