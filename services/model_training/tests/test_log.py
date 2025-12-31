@@ -12,8 +12,8 @@ class TestLog(unittest.TestCase):
     @patch("mlflow.log_metric")
     @patch("mlflow.log_metrics")
     @patch("mlflow.log_artifacts")
-    @patch("hdbscan.validity.validity_index")
-    @patch("sklearn.metrics.silhouette_score")
+    @patch("src.log.validity_index")
+    @patch("src.log.silhouette_score")
     def test_log_experiment(
         self,
         mock_silhouette,
@@ -32,7 +32,9 @@ class TestLog(unittest.TestCase):
         mock_scalers = {"behavioral": MagicMock()}
         mock_clusterer = MagicMock()
         mock_noise_clf = MagicMock()
-        X_scaled = np.random.rand(5, 5) 
+        
+        # Use simple random data
+        X_scaled = np.random.rand(5, 5)
         df_final = pd.DataFrame(
             {"cluster": [0, 0, 1, 1, -1], "cluster_final": [0, 0, 1, 1, 0]}
         )
@@ -56,10 +58,12 @@ class TestLog(unittest.TestCase):
             "famd_components", config.FAMD_COMPONENTS
         )
         mock_log_params.assert_called_once_with(config.HDBSCAN_PARAMS)
+        
         mock_log_metrics.assert_called_once_with(
             {"initial_noise_ratio": 0.2, "dbcv_score": 0.8}
         )
         mock_log_metric.assert_called_once_with("final_silhouette_score", 0.7)
+        
         self.assertEqual(mock_joblib_dump.call_count, 4)
         mock_log_artifacts.assert_called_once_with(
             config.ARTIFACT_PATH, artifact_path="results"
