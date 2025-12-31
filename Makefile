@@ -55,6 +55,10 @@ test-all:
 	@echo "Running Model Training Tests..."
 	cd services/model_training && poetry run pytest
 
+# Run integration tests (Requires an environment with dependencies from all services installed)
+test-integration:
+	python3 -m unittest discover tests
+
 # Check code style (Optional, requires ruff/flake8 installed)
 lint:
 	poetry run ruff check .
@@ -76,3 +80,4 @@ help:
 	@echo "logs         : Tail logs"
 	@echo "test         : Run tests for specific service (e.g., make test service=etl)"
 	@echo "test-all     : Run all unit tests"
+	@echo "test-integration : Run end-to-end integration tests (requires combined env)"
