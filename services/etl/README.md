@@ -1,23 +1,20 @@
-# ETL Service
+# ETL & Feature Engineering Service
 
-This service handles the Extraction, Transformation, and Loading of data. It ingests raw Parquet files, validates them, performs feature engineering, and aggregates transactional data into store-level features.
+This service transforms raw, event-level data into a high-quality, aggregated feature set ready for machine learning. It demonstrates best practices in data validation, scalable processing, and thoughtful feature engineering.
 
-## Features
+## Key Data Science Contributions
 
-*   **Data Validation**: Uses **Great Expectations** to validate raw data (e.g., checking for nulls, ensuring positive sales quantities) before processing. Results are saved as JSON for the dashboard.
-*   **Scalable Processing**: Uses **PySpark** to handle large volumes of sales and inventory data efficiently.
+*   **Data Validation with Great Expectations**: Before any processing, raw data is validated against a suite of expectations (e.g., sales quantities must be positive, IDs must not be null). This is a critical first step in any robust ML pipeline to prevent data quality issues from silently corrupting model results.
+*   **Scalable Feature Aggregation with PySpark**: The pipeline is built with PySpark to demonstrate the ability to handle large-scale transactional data that would not fit into memory with `pandas`. It aggregates millions of sales records to create meaningful store-level features.
 *   **Feature Engineering**:
-    *   **Imputation**: Uses Linear Regression to impute missing `size_m2` values based on `storage_capacity_m2`.
-    *   **Aggregation**: Calculates metrics like `Total Revenue`, `Revenue per Sqm`, `Avg Ticket`, and `Profit Margin`.
-    *   **Pivoting**: Creates category-level revenue features.
-*   **Dagster Integration**: Exposes a gRPC server for the Orchestrator.
+    *   **Advanced Imputation Strategy**: Instead of using a simple mean or median, missing `size_m2` values are imputed using a **Linear Regression model** trained on the highly correlated `storage_capacity_m2` feature. This more sophisticated approach leads to a more accurate and representative feature set.
+    *   **Rich Feature Creation**: The service engineers a variety of features crucial for clustering, including performance metrics (`Total Revenue`, `Revenue per Sqm`), behavioral indicators (`Avg Ticket Item`), and product mix insights (pivoted category-level revenues).
 
 ## Tech Stack
 
 *   **Python 3.11**
 *   **PySpark**: Distributed data processing.
 *   **Great Expectations**: Data quality validation.
-*   **Dagster**: Orchestration integration.
 
 ## Output
 
