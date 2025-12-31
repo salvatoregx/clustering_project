@@ -40,3 +40,5 @@ HDBSCAN_PARAMS = {
     "metric": 'manhattan',
     "cluster_selection_method": 'eom'
 }
+
+HDBSCAN_TEST_METRIC = 'cityblock'
