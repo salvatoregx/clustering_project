@@ -1,7 +1,8 @@
-import pandas as pd
-import numpy as np
-from faker import Faker
 import logging
+
+import numpy as np
+import pandas as pd
+from faker import Faker
 
 
 def generate(num_products: int, fake: Faker):

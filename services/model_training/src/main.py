@@ -7,10 +7,11 @@ results with MLflow.
 """
 
 import logging
+
 import mlflow
 from mlflow.tracking import MlflowClient
 
-from . import config, data, preprocess, cluster, log
+from . import cluster, config, data, log, preprocess
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"

@@ -1,7 +1,7 @@
 import streamlit as st
 
 import data_loader
-from tabs import data_integrity, visualization, business_actions
+from tabs import business_actions, data_integrity, visualization
 
 
 def main():

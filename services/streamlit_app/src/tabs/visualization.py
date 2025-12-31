@@ -1,7 +1,7 @@
-import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+import streamlit as st
 from sklearn.manifold import TSNE
 from sklearn.preprocessing import MinMaxScaler
 

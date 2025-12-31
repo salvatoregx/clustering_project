@@ -1,4 +1,5 @@
-from dagster import asset, Definitions
+from dagster import Definitions, asset
+
 from . import generate
 
 

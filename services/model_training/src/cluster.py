@@ -1,8 +1,10 @@
-import pandas as pd
-import hdbscan
-from sklearn.ensemble import RandomForestClassifier
-from . import config
 import logging
+
+import hdbscan
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+
+from . import config
 
 
 def run_clustering(X_scaled: pd.DataFrame, original_df: pd.DataFrame):

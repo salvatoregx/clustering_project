@@ -8,9 +8,7 @@ and then stopping the session.
 
 import logging
 
-from . import config
-from . import spark
-from . import transform
+from . import config, spark, transform
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"

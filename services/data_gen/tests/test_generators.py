@@ -1,8 +1,10 @@
 import unittest
+
 import pandas as pd
 from faker import Faker
-from src.generators import products, stores
+
 from src import config
+from src.generators import products, stores
 
 
 class TestGenerators(unittest.TestCase):

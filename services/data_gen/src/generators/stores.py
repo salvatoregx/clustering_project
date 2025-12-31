@@ -1,8 +1,10 @@
-import pandas as pd
-import numpy as np
-from faker import Faker
-from .. import config
 import logging
+
+import numpy as np
+import pandas as pd
+from faker import Faker
+
+from .. import config
 
 
 def generate(num_stores: int, fake: Faker):

@@ -1,4 +1,5 @@
-from dagster import asset, Definitions, AssetKey, SourceAsset, AutoMaterializePolicy
+from dagster import AssetKey, AutoMaterializePolicy, Definitions, SourceAsset, asset
+
 from . import main as etl_main
 
 # Reference the asset from the data_gen service

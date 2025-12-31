@@ -1,10 +1,12 @@
+import logging
 import os
 import shutil
+
 import numpy as np
-import logging
 from faker import Faker
+
 from . import config
-from .generators import products, stores, history
+from .generators import history, products, stores
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"

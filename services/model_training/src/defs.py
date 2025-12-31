@@ -1,11 +1,12 @@
 from dagster import (
-    asset,
-    Definitions,
     AssetKey,
-    SourceAsset,
-    MetadataValue,
     AutoMaterializePolicy,
+    Definitions,
+    MetadataValue,
+    SourceAsset,
+    asset,
 )
+
 from . import main as model_main
 
 # Reference the asset from the etl service

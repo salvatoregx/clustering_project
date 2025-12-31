@@ -1,8 +1,10 @@
 import unittest
-from unittest.mock import patch, MagicMock
-import pandas as pd
+from unittest.mock import MagicMock, patch
+
 import numpy as np
-from src import log, config
+import pandas as pd
+
+from src import config, log
 
 
 class TestLog(unittest.TestCase):
@@ -32,7 +34,7 @@ class TestLog(unittest.TestCase):
         mock_scalers = {"behavioral": MagicMock()}
         mock_clusterer = MagicMock()
         mock_noise_clf = MagicMock()
-        
+
         # Use simple random data
         X_scaled = np.random.rand(5, 5)
         df_final = pd.DataFrame(
@@ -58,12 +60,12 @@ class TestLog(unittest.TestCase):
             "famd_components", config.FAMD_COMPONENTS
         )
         mock_log_params.assert_called_once_with(config.HDBSCAN_PARAMS)
-        
+
         mock_log_metrics.assert_called_once_with(
             {"initial_noise_ratio": 0.2, "dbcv_score": 0.8}
         )
         mock_log_metric.assert_called_once_with("final_silhouette_score", 0.7)
-        
+
         self.assertEqual(mock_joblib_dump.call_count, 4)
         mock_log_artifacts.assert_called_once_with(
             config.ARTIFACT_PATH, artifact_path="results"

@@ -1,10 +1,12 @@
 import unittest
-import pandas as pd
+from unittest.mock import MagicMock, patch
+
 import numpy as np
-from unittest.mock import patch, MagicMock
-from src import preprocess, config
-from sklearn.preprocessing import StandardScaler
+import pandas as pd
 import prince
+from sklearn.preprocessing import StandardScaler
+
+from src import config, preprocess
 
 
 class TestPreprocess(unittest.TestCase):

@@ -1,9 +1,10 @@
-import mlflow
-import joblib
+import logging
 import os
+
+import joblib
+import mlflow
 from hdbscan.validity import validity_index
 from sklearn.metrics import silhouette_score
-import logging
 
 from . import config
 

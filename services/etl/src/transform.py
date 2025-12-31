@@ -1,12 +1,12 @@
-import os
-from pyspark.sql import SparkSession, DataFrame
 import logging
-from pyspark.sql import functions as F
+import os
+
 from pyspark.ml.feature import VectorAssembler
 from pyspark.ml.regression import LinearRegression
+from pyspark.sql import DataFrame, SparkSession
+from pyspark.sql import functions as F
 
-from . import config
-from . import validation
+from . import config, validation
 
 
 def _load_data(spark: SparkSession) -> dict[str, DataFrame]:

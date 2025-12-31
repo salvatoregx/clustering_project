@@ -1,8 +1,10 @@
 import logging
-import pandas as pd
+
 import numpy as np
+import pandas as pd
 import prince
 from sklearn.preprocessing import StandardScaler
+
 from . import config
 
 
