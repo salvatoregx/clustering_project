@@ -41,7 +41,7 @@ def show(df):
     X_scaled = MinMaxScaler().fit_transform(X)
 
     # Run t-SNE
-    tsne = TSNE(n_components=2, random_state=42, perplexity=perplexity, n_iter=300)
+    tsne = TSNE(n_components=2, random_state=42, perplexity=perplexity, max_iter=300)
     projections = tsne.fit_transform(X_scaled)
 
     df_plot = df.copy()
